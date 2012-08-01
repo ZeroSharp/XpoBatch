@@ -11,7 +11,6 @@ A set of extension methods which makes it easy to execute batch wide deletions a
 using (UnitOfWork uow = new UnitOfWork())
 {
     uow.Delete<MyObject>(CriteriaOperator.Parse("City != 'Chicago'"));
-    uow.CommitChanges();
 }
 ```
 
