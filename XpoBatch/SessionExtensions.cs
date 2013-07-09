@@ -107,7 +107,9 @@ namespace XpoBatch
             {
                 for (int i = 0; i < updateStatement.Parameters.Count; i++)
                 {
-                    Object value = propertyValueStore[i].Value;
+                    // support for converter
+                    var valueConverter = propertyValueStore[i].Key.Converter;
+                    Object value = (valueConverter != null) ? valueConverter.ConvertToStorageType(propertyValueStore[i].Value) : propertyValueStore[i].Value;
                     if (value is IXPObject)
                         updateStatement.Parameters[i].Value = ((IXPObject)(value)).ClassInfo.GetId(value);
                     else
