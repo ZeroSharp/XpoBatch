@@ -31,6 +31,6 @@ using (UnitOfWork uow = new UnitOfWork())
 
 ### Dependencies ###
 
-Requires [DevExpress XPO](http://devexpress.com/Products/NET/ORM/). This currently uses version 12.1.7, but it works with 11.2 and possibly earlier versions with minor changes that are documented in the code.
+Requires [DevExpress XPO](http://devexpress.com/Products/NET/ORM/). This currently uses version 13.1.3, but it works with versions as old as 11.2 and possibly earlier with minor changes that are documented in the code.
 
 Includes NUnit 2.6 NuGet package.
