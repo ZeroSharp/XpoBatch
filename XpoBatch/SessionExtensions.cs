@@ -64,8 +64,9 @@ namespace XpoBatch
             /// var batchWideData = new BatchWideDataHolder(session);
             var batchWideData = new BatchWideDataHolder4Modification(session);
             int recordsAffected = (int)session.Evaluate<T>(CriteriaOperator.Parse("Count()"), criteria);
-            var criteriaSet = ObjectGeneratorCriteriaSet.GetCommonCriteriaSet(criteria);
-            List<ModificationStatement> collection = DeleteQueryGenerator.GenerateDelete(classInfo, criteriaSet, batchWideData);
+            /// if you are using DevExpress 13.1.5 or earlier
+            /// List<ModificationStatement> collection = DeleteQueryGenerator.GenerateDelete(classInfo, criteria, batchWideData);
+            List<ModificationStatement> collection = DeleteQueryGenerator.GenerateDelete(classInfo, ObjectGeneratorCriteriaSet.GetCommonCriteriaSet(criteria), batchWideData);
             foreach (ModificationStatement item in collection)
             {
                 item.RecordsAffected = recordsAffected;
@@ -102,8 +103,9 @@ namespace XpoBatch
                 });
 
             MemberInfoCollection properties = new MemberInfoCollection(classInfo, propertyValueStore.Select(x => x.Key).ToArray());
-            var criteriaSet = ObjectGeneratorCriteriaSet.GetCommonCriteriaSet(criteria);
-            List<ModificationStatement> collection = UpdateQueryGenerator.GenerateUpdate(classInfo, properties, criteriaSet, batchWideData);
+            /// if you are using DevExpress 13.1.5 or earlier
+            /// List<ModificationStatement> collection = UpdateQueryGenerator.GenerateUpdate(classInfo, properties, criteria, batchWideData);
+            List<ModificationStatement> collection = UpdateQueryGenerator.GenerateUpdate(classInfo, properties, ObjectGeneratorCriteriaSet.GetCommonCriteriaSet(criteria), batchWideData);
             foreach (UpdateStatement updateStatement in collection.OfType<UpdateStatement>())
             {
                 for (int i = 0; i < updateStatement.Parameters.Count; i++)
