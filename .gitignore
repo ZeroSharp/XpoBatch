@@ -65,8 +65,8 @@ local.properties
 .builds
 **/*.dotCover
 
-## TODO: If you have NuGet Package Restore enabled, uncomment this
-#**/packages/ 
+# Nuget packages subfolder
+packages/
 
 # Visual C++ cache files
 ipch/
@@ -78,6 +78,13 @@ ipch/
 # Visual Studio profiler
 *.psess
 *.vsp
+
+# Visual Studio Code
+.vscode/
+
+# Visual Studio
+.vs/
+.cr/
 
 # ReSharper is a .NET coding add-in
 _ReSharper*
@@ -119,6 +126,7 @@ UpgradeLog*.XML
 # NCrunch
 _NCrunch*/
 *.ncrunchproject
+*.ncrunchsolution
 
 ############
 ## Mercurial
