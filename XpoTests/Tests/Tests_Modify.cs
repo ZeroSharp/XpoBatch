@@ -46,6 +46,20 @@ namespace XpoTests
                 Assert.AreEqual(affectedRecords, uow.GetObjectCount<MySimpleObject>(MySimpleObject.Fields.EnumProperty == new OperandValue(MyEnum.Blue)));
             }
         }
+
+        [Test]
+        public void Test_ModifySome_Enum_With_PersistentAlias_Criteria()
+        {
+            CriteriaOperator criteria = CriteriaOperator.Parse("StartsWith([PersistentAliasProperty], 'A')");
+
+            using (UnitOfWork uow = new UnitOfWork(DefaultDataLayer))
+            {
+                int affectedRecords = uow.GetObjectCount<MySimpleObject>(MySimpleObject.Fields.EnumProperty == new OperandValue(MyEnum.Blue) & !criteria)
+                                    + uow.GetObjectCount<MySimpleObject>(criteria);
+                uow.Update<MySimpleObject>(() => new MySimpleObject(uow) { EnumProperty = MyEnum.Blue }, criteria);
+                Assert.AreEqual(affectedRecords, uow.GetObjectCount<MySimpleObject>(MySimpleObject.Fields.EnumProperty == new OperandValue(MyEnum.Blue)));
+            }
+        }
     }
 
     [TestFixture]

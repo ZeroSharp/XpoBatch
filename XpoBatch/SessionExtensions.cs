@@ -6,6 +6,7 @@ using DevExpress.Data.Filtering;
 using DevExpress.Xpo;
 using DevExpress.Xpo.DB;
 using DevExpress.Xpo.Generators;
+using DevExpress.Xpo.Helpers;
 using DevExpress.Xpo.Metadata;
 using DevExpress.Xpo.Metadata.Helpers;
 
@@ -64,9 +65,10 @@ namespace XpoBatch
             /// var batchWideData = new BatchWideDataHolder(session);
             var batchWideData = new BatchWideDataHolder4Modification(session);
             int recordsAffected = (int)session.Evaluate<T>(CriteriaOperator.Parse("Count()"), criteria);
-            /// if you are using DevExpress 13.1.5 or earlier
-            /// List<ModificationStatement> collection = DeleteQueryGenerator.GenerateDelete(classInfo, criteria, batchWideData);
-            List<ModificationStatement> collection = DeleteQueryGenerator.GenerateDelete(classInfo, ObjectGeneratorCriteriaSet.GetCommonCriteriaSet(criteria), batchWideData);
+
+            ExpandedCriteriaHolder expandedCriteriaHolder = PersistentCriterionExpander.Expand(session, classInfo, criteria, true);
+            var expandedCriteriaSet = ObjectGeneratorCriteriaSet.GetCommonCriteriaSet(expandedCriteriaHolder.ExpandedCriteria);
+            List<ModificationStatement> collection = DeleteQueryGenerator.GenerateDelete(classInfo, expandedCriteriaSet, batchWideData);
             foreach (ModificationStatement item in collection)
             {
                 item.RecordsAffected = recordsAffected;
@@ -82,8 +84,6 @@ namespace XpoBatch
                 criteria = CriteriaOperator.Parse("True");
 
             XPClassInfo classInfo = session.GetClassInfo(typeof(T));
-            /// if you are using DevExpress 11.2 or earlier
-            /// var batchWideData = new BatchWideDataHolder(session);
             var batchWideData = new BatchWideDataHolder4Modification(session);
             int recordsAffected = (int)session.Evaluate<T>(CriteriaOperator.Parse("Count()"), criteria);
 
@@ -103,9 +103,9 @@ namespace XpoBatch
                 });
 
             MemberInfoCollection properties = new MemberInfoCollection(classInfo, propertyValueStore.Select(x => x.Key).ToArray());
-            /// if you are using DevExpress 13.1.5 or earlier
-            /// List<ModificationStatement> collection = UpdateQueryGenerator.GenerateUpdate(classInfo, properties, criteria, batchWideData);
-            List<ModificationStatement> collection = UpdateQueryGenerator.GenerateUpdate(classInfo, properties, ObjectGeneratorCriteriaSet.GetCommonCriteriaSet(criteria), batchWideData);
+            ExpandedCriteriaHolder expandedCriteriaHolder = PersistentCriterionExpander.Expand(session, classInfo, criteria, true);
+            var expandedCriteriaSet = ObjectGeneratorCriteriaSet.GetCommonCriteriaSet(expandedCriteriaHolder.ExpandedCriteria);
+            List<ModificationStatement> collection = UpdateQueryGenerator.GenerateUpdate(classInfo, properties, expandedCriteriaSet, batchWideData);
             foreach (UpdateStatement updateStatement in collection.OfType<UpdateStatement>())
             {
                 for (int i = 0; i < updateStatement.Parameters.Count; i++)

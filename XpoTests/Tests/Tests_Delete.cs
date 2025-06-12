@@ -34,6 +34,21 @@ namespace XpoTests
         }
 
         [Test]
+        public void Test_DeleteSome_With_PersistentAlias_Criteria()
+        {
+            CriteriaOperator criteria = CriteriaOperator.Parse("StartsWith([PersistentAliasProperty], 'A')");
+
+            using (UnitOfWork uow = new UnitOfWork(DefaultDataLayer))
+            {
+                int recordsAffected = uow.GetObjectCount<MySimpleObject>(criteria);
+                Assert.Greater(recordsAffected, 0);
+                uow.Delete<MySimpleObject>(criteria);
+                Assert.AreEqual(1000 - recordsAffected, uow.GetObjectCount<MySimpleObject>());
+            }
+        }
+
+
+        [Test]
         public void Test_DeleteNone()
         {
             CriteriaOperator criteria = CriteriaOperator.Parse("1=0");

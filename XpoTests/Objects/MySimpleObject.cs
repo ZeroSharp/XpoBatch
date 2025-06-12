@@ -24,6 +24,7 @@ namespace XpoTests
             base.AfterConstruction();
         }
 
+        string _PersistentAliasProperty;
         [Key(AutoGenerate = false)]
         [Persistent("ID")]
         private Guid _Id;
@@ -84,7 +85,17 @@ namespace XpoTests
             {
                 _ReferenceProperty = value;
             }
-        }       
+        }
+
+        
+        [PersistentAlias("Concat(StringProperty, IntegerProperty)")]
+        public string PersistentAliasProperty
+        {
+            get
+            {
+                return _PersistentAliasProperty;
+            }
+        }
 
         private static FieldsClass _Fields;
         public new static FieldsClass Fields
